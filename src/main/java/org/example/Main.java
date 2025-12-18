@@ -1,43 +1,52 @@
 package org.example;
 
 import org.example.Entitys.*;
-import org.example.Rules.ShipRules;
+import org.example.GameEngine.Engine;
 
-import java.util.ArrayList;
 import java.util.List;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-       Board board = new Board(14,14);
+        Board board = new Board(14,14);
+        Engine engine = new Engine(board);
+        PlayerDTO playerDTO = new PlayerDTO();
+        Machine machine = new Machine(board);
 
-       Point p1 = new Point(4,5);
-       Point p2 = new Point(5,5);
-       Point p3 = new Point(6,5);
+        Ship ship1 = new Ship(List.of(new Point(5,6), new Point(5,7)));
+        Ship ship2 = new Ship(List.of(new Point(8,2), new Point(8,1)));
+        Ship ship3 = new Ship(List.of(new Point(6,12), new Point(6,13)));
 
-       Ship ship = new Ship(List.of(p1, p2, p3));
-       ShipRules rules = new ShipRules(board, ship);
+        playerDTO.setMyShips(List.of(ship1, ship2));
 
-       boolean sequencial = rules.isSequencial();
-       System.out.println(sequencial);
-//       PlayerDTO player = new PlayerDTO(new ArrayList<>(List.of(ship)));
-//       Point pAttack = new Point(4, 5);
-//       Attack attack = new Attack(board,pAttack);
+        List<Point> points = machine.positioningRandom(board,playerDTO);
+
+        for (Point p : points){
+            System.out.println(p.X);
+            System.out.println(p.Y);
+            board.markBoard(p, "M");
+        }
+
+
+        for (String[] str : board.getDimensity()){
+            for (String i : str){
+                System.out.print(i);
+            }
+            System.out.println();
+        }
+//        engine.formingFleet(board, playerDTO);
 //
-//
-//
-//       attack.hitShip(player, pAttack);
-//
-//        for(String[] arr : board.getDimensity()){
-//            for(String str : arr){
-//                System.out.print(str);
-//            }
-//            System.out.println();
-//        }
+//        System.out.println(playerDTO.getMyShips());
+
 
     }
 }
+
+
+//Preciso criar a borda limite dos navios da maquina
+// As coordenadas não estão reduzindo quando chegam na borda
+
 
 //Legenda:
 
@@ -46,3 +55,4 @@ public class Main {
 // X -> proibido
 
 //Modo sem validação, chamar putShip depois da area de segurança ser feita
+

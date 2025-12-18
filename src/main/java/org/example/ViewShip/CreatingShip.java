@@ -7,40 +7,47 @@ import org.example.Entitys.Ship;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 
 public class CreatingShip {
     private final Scanner input = new Scanner(System.in);
     private final List<Point> points = new ArrayList<>();
-//    private Board board;
+    private final Set<String> positiveChoices = Set.of("sim", "s", "ss");
 
+    public List<Ship> createShips(Board board){
+        while(true){
+            System.out.println("Quantas células terá seu navio: ");
+            int cells = Integer.parseInt(input.nextLine().trim());
 
-//    public CreatingShip(Board board) {
-//        this.board = board;
-//    }
+            if (cells > 6) {
+                throw new IllegalArgumentException("O máximo de células permitidos é 6.");
+            }
 
-    public Ship createShip(Board board){
-        System.out.println("Quantas células terá seu navio: ");
-        int cells = Integer.parseInt(input.nextLine().trim());
+            List<Ship> playerShips = new ArrayList<>();
+            for (int i = 0; i < cells; i++) {
+                board.printBoard();
 
-        if(cells > 6){
-            throw new IllegalArgumentException("O máximo de células permitidos é 6.");
-        }
+                System.out.print("Linha: ");
+                int line = Integer.parseInt(input.nextLine().trim());
 
-        for (int i = 0; i <= cells; i++) {
-            board.printBoard();
+                System.out.println("Coluna: ");
+                int column = Integer.parseInt(input.nextLine().trim());
 
-            System.out.print("Linha: ");
-            int line = Integer.parseInt(input.nextLine().trim());
+                Point point = new Point(line, column);
+                points.add(point);
+                playerShips.add(new Ship(points));
 
-            System.out.println("Coluna: ");
-            int column = Integer.parseInt(input.nextLine().trim());
+                board.markBoard(point, "N");
+            }
+            playerShips.add(new Ship(points));
 
-            Point point = new Point(line, column);
-            points.add(point);
-            board.markBoard(point, "N");
-        }
-
-        return new Ship(points);
+            System.out.println("Adicionar um novo navio? ");
+            String choice = input.nextLine().trim().toLowerCase();
+            if (positiveChoices.contains(choice)) {
+                continue;
+            }
+            return playerShips;
+        } //Mudar para retornar um Player
 
     }
 
