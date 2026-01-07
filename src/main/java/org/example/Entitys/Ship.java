@@ -42,6 +42,10 @@ public class Ship {
         return positionShips.stream().map(p -> p.Y).sorted().toList();
     }
 
+    public void destroyedPoint(Point point){
+        positionShips.remove(point);
+    }
+
 
 
 }

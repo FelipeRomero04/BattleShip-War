@@ -2,61 +2,45 @@ package org.example.GameEngine;
 
 import org.example.Entitys.*;
 import org.example.Rules.RulesMachine;
-import org.example.Rules.ShipRules;
+import org.example.Rules.RulesPlayer;
 import org.example.ViewShip.CreatingShip;
 
 import java.util.List;
 
 public class Engine {
-    Board board;
-    CreatingShip creatingShip = new CreatingShip();
-    RulesMachine rulesMachine;
-    ShipRules shipRules; // vai sair e virar o validations(eu acho) static?
-    //Aqui vai ser o controller
 
+    CreatingShip creatingShip;
+    RulesPlayer rulesPlayer;
 
+    public Engine(CreatingShip creatingShip) {
 
-
-    public Engine(Board board) {
-        this.board = board;
-        this.shipRules = new ShipRules(board);
+        this.creatingShip = creatingShip;
+        this.rulesPlayer = new RulesPlayer();
     }
 
     //Pensar em como vou inicializar tudo da melhor forma
 
-    public boolean playerWin(PlayerDTO player, PlayerDTO machine){
-        if(player.getMyShips().isEmpty()){
-            return false;
-        }
-        return machine.getMyShips().isEmpty();
+    public boolean playerWin(PlayerDTO player, Machine machine){
+        return player.getMyShips().isEmpty();
+    }//TODO: FAZER ENUM
+
+    public Board creatingBoard(){
+        return creatingShip.defineSizeBoard();
     }
 
 
-    public void formingFleet(Board board, PlayerDTO player){  //Formando frota
-        List<Ship> ships = creatingShip.createShips(board); // vai ser uma lista
-        for(Ship ship : ships){
-            shipRules.superimposeShip(ship);
-            if(!shipRules.xIsSequencial(ship) && !shipRules.yIsSequencial(ship)){
-                throw new RuntimeException("Os navio devem ser posicionados sequencialmente, na horizontal ou vertical.");
-            }
-            shipRules.offLimits(ship);
-        }
-        player.setMyShips(ships);
-    }// Metodo fere o principio SRP, valida e adiciona o jogador
+    public PlayerDTO formingFleet(Board board){  //Formando frota
+        List<Ship> ships = creatingShip.createShips(board);
 
-
-    public void hitPlayer(PlayerDTO player){
-//        PlayerDTO player = creatingShip.createShips(board);
-        Ship shipAttacked = rulesMachine.attackPlayer(player);
-        for (Point point : shipAttacked.getPositionShips()) {
-            board.markBoard(point, "A");
-        }
-
-        player.getMyShips().remove(shipAttacked);
+        // vai ser uma lista
+        return rulesPlayer.formingFleet(board,ships);
     }
 
-    public void hitMachine(Machine machine){
 
+    public Point hitMachine(Board board,Machine machine){
+        Point pointHit = creatingShip.hitPoint();
+        rulesPlayer.attackingPoint(board ,machine, pointHit);
+        return pointHit;
     }
 
 

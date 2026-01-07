@@ -1,31 +1,39 @@
 package org.example.Rules;
 
 import org.example.Entitys.*;
+import org.example.Rules.searchEngine.SearchEngine;
+import org.example.Rules.searchEngine.SearchEngineShipPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class RulesMachine {
-    private final Board board;
-    private final PlayerDTO player;
-    private final Machine machine;
+    private final Random random = new Random();
 
-    public RulesMachine(Board board, PlayerDTO playerDTO) {
-        this.board = board;
-        this.player = playerDTO;
-        this.machine = new Machine(board,playerDTO);
+    private final SearchEngine engineMachine;
+    private final SearchEngineShipPlayer enginePlayer;
+
+    private boolean sequencial = false;
+
+
+    public RulesMachine( SearchEngine engine, SearchEngineShipPlayer enginePlayer) {
+//        this.board = board;
+        this.engineMachine = engine;
+        this.enginePlayer = enginePlayer;
     }
 
 
-    public void positioningRandom(){
-
+    public Machine positioningRandom(PlayerDTO player, Board board){
         List<Point> points = new ArrayList<>();
-        List<Integer> cellNum = machine.cellPerShip(player);
+        List<Ship> machineShips = new ArrayList<>();
+        List<Integer> cellNum = cellPerShip(player);
+
         for (int i = 0; i < cellNum.size() ; i++) {
 
-            int column = machine.randomColumn();
-            int line = machine.randomLine();
-            int directionRandom = machine.randomDirection();
+            int column = random.nextInt(0, board.getHeight());
+            int line = random.nextInt(0, board.getWidth());
+            int directionRandom = random.nextInt(1,3);
 
             for (int j = 0; j < cellNum.get(i); j++) {
 
@@ -33,109 +41,115 @@ public class RulesMachine {
                 points.add(point);
 
                 if(directionRandom == 1){
-                    column = decrementOrIncrementColumn(column, cellNum.get(i));
+                    column = decrementOrIncrementColumn(board,column, cellNum.get(i));
                 }
 
                 if(directionRandom == 2){
-                    line = decrementOrIncrementLine(line, cellNum.get(i));
+                    line = decrementOrIncrementLine(board ,line, cellNum.get(i));
                 }
             }
             System.out.println(points);
-            machine.getMachineShips().add(new Ship(points));
+            machineShips.add(new Ship(points));
+        }
+        return new Machine(board, machineShips);
+    }
+
+//if(player.getShips.size > 1)
+    // searchShip, machineAttackSequencial
+    public Point findShipTarget(Board board,PlayerDTO player){
+        if(enginePlayer.getRandomShip(player).getPositionShips().isEmpty()){ //Acabou as posições do ship
+           resetSearch(board, player);
         }
 
+        Point randomPoint = enginePlayer.getPointFromRandomShip(player);
+        Point findShip = engineMachine.searchShip(randomPoint);
+
+        definingAttackMode(findShip, randomPoint);
+        return findShip;
+    }
+
+    public void attackMachineSequencial(Board board, PlayerDTO player) {
+
+        Point attackPoint = findShipTarget(board ,player);
+
+        if(!sequencial){
+            System.out.println("ENTROU AKI");
+            System.out.println("X: " + attackPoint.X + " Y: " + attackPoint.Y);
+            board.markBoard(attackPoint, "E");
+            return;
+        }
+
+        Ship shipRandom = sequencialMode(board, player);
+
+        if(shipRandom.getPositionShips().isEmpty()){
+            player.getMyShips().remove(shipRandom);
+        }
 
     }
 
-//    public void attackPlayer(PlayerDTO player){
-//        int column = machine.randomColumn();
-//        int line = machine.randomLine();
-//
-//        Point point = new Point(line,column);
-//        Point attackPoint = new Point();
-//
-//        for(Ship shipPlayer : player.getMyShips()){
-//            if(shipPlayer.getPositionShips().contains(point)){
-//               attackPoint = shipPlayer.getPositionShips().get(0);
-//               shipPlayer.getPositionShips().remove(attackPoint);
-//               break;
-//            }
+    private void resetSearch(Board board, PlayerDTO player){
+        enginePlayer.NewRandomShip(player);
+        enginePlayer.NewRandomPoint();
+        this.sequencial = false;
+        engineMachine.resetIntervals(board);
+    }
+
+    private void definingAttackMode(Point pointPlayer, Point pointMachine){
+        if(pointPlayer.equals(pointMachine)){
+            System.out.println("Seu navio está sendo atacado! ");
+            this.sequencial = true;
+        }
+    }
+
+    private Ship sequencialMode(Board board,PlayerDTO player){
+        Ship shipRandom = enginePlayer.getRandomShip(player);
+        Point attackPoint = shipRandom.getPositionShips().get(random.nextInt(shipRandom.getPositionShips().size()));
+        System.out.println("X: " + attackPoint.X + " Y: " + attackPoint.Y);
+
+        board.markBoard(attackPoint, "X");
+        System.out.println("Seu Navio está sendo bombardeado.");
+
+        shipRandom.getPositionShips().remove(attackPoint);
+        return shipRandom;
+    }
+
+
+
+
+
+//    public void attackMachineSequencial(boolean flag) {
+//        findShipTarget();
+//        Point randomPoint = enginePlayer.getPointFromRandomShip();
+//        if(sequencial){
+//            Ship shipRandom = enginePlayer.getRandomShip();
+//            randomPoint = shipRandom.getPositionShips().get(random.nextInt(shipRandom.getPositionShips().size()));
+//            board.markBoard(randomPoint, "X");
+//            shipRandom.destroyedPoint(randomPoint);
 //
 //        }
 //
-//        board.markBoard(attackPoint, "A");
+//        board.markBoard(randomPoint, "E");
+//
+//
+//
 //    }
 
-    //Provalmente refatorar par um modo em que o point seja encontrado
-    //Mais facilmente
-
-    public Ship machineAttack(PlayerDTO player){
-        int column = machine.randomColumn(0 ,board.getHeight());
-        int line = machine.randomLine(0 ,board.getWidth());
-
-        int midColumn = board.getHeight() / 2;
-        int midLine = board.getWidth() / 2;
-        Point randomPoint = new Point(line,column);
-
-        int i = 0;
-        while(true){
-            Ship shipPlayer = player.getMyShips().get(i);
-
-            for(Point point : shipPlayer.getPositionShips()){
-                if(point.equals(randomPoint)){
-                    return shipPlayer;
-                }
-
-                if(point.Y > midColumn){
-                    column = machine.randomColumn(0, midColumn);
-                    continue;
-                }
-
-                if(point.Y < midColumn){
-                    column = machine.randomColumn(midColumn, board.getHeight());
-                }
-
-                if(point.X < mid)
-            }
 
 
+
+
+    private List<Integer> cellPerShip(PlayerDTO player){
+        List<Integer> cells = new ArrayList<>();
+        for(Ship ship : player.getMyShips()){
+            cells.add(ship.getPositionShips().size());
         }
-
-        throw new RuntimeException("");
-
-    }
-    //Achar um point e retornar o ship
-
-
-    private int searchPointY(){
-        int start = 0;
-
-        int column = machine.randomColumn(start ,board.getHeight());
-        int midColumn = board.getHeight() / 2;
-
-        int i = 0; //Colocar numero aleatorio
-        while(true){
-            Ship shipPlayer = player.getMyShips().get(i);
-            Point point = shipPlayer.getPositionShips().get(i);
-
-            if(column == point.Y){
-                return column;
-            }
-
-            if(point.Y > midColumn){
-                column = machine.randomColumn(0, midColumn);
-            }
-
-            if(point.Y < midColumn){
-                column = machine.randomColumn(midColumn, board.getHeight());
-            }
-
-
-        }
+        return cells;
     }
 
 
-    private int decrementOrIncrementColumn(int column, int cell){
+
+
+    private int decrementOrIncrementColumn(Board board,int column, int cell){
         if (column + cell >= board.getHeight()) {
             System.out.println(column + cell);
             return column - 1;
@@ -144,7 +158,7 @@ public class RulesMachine {
         return column + 1;
     }
 
-    private int decrementOrIncrementLine(int line, int cell){
+    private int decrementOrIncrementLine(Board board ,int line, int cell){
         if (line + cell >= board.getWidth()) {
             System.out.println(line + cell);
             return line - 1;

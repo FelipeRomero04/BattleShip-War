@@ -10,7 +10,7 @@ public class ViewBoard {
     }
 
     public void printBoard(){
-        for (String[] line : board.getDimensity()){
+        for (String[] line : board.getMatriz()){
             for (String column : line){
                 System.out.print(column);
             }

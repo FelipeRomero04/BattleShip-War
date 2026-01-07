@@ -21,10 +21,10 @@ import java.util.List;
 //    public void superimposeShip(Ship ship){
 //        try{
 //            for (Point point : ship.getPositionShips()) {
-//                if (board.getDimensity()[point.X()][point.Y()].equals("O")) {
+//                if (board.getMatriz()[point.X()][point.Y()].equals("O")) {
 //                    throw new IllegalArgumentException("Um navio ja esta posicionado neste local");
 //
-//                } else if (board.getDimensity()[point.X()][point.Y()].equals("X")) {
+//                } else if (board.getMatriz()[point.X()][point.Y()].equals("X")) {
 //                    throw new IllegalArgumentException("Essa área pertence a um navio proximo");
 //                }
 //            }
@@ -73,7 +73,7 @@ import java.util.List;
 //                    int newLine = point.X() + xLine;
 //                    int newColumn = point.Y() + yLine;
 //
-//                    board.getDimensity()[newLine][newColumn] = "O";
+//                    board.getMatriz()[newLine][newColumn] = "O";
 //                }
 //            }
 //            index++;

@@ -5,14 +5,14 @@ import java.util.Arrays;
 public class Board {
     private final int height;
     private final int width;
-    private String[][] dimensity;
+    private String[][] matriz;
 
 
     public Board(int height, int width) {
         this.height = height;
         this.width = width;
-        this.dimensity = new String[height][width];
-        for (String[] arr : dimensity) {
+        this.matriz = new String[height][width];
+        for (String[] arr : matriz) {
             Arrays.fill(arr, "~");
         }
     }
@@ -24,26 +24,40 @@ public class Board {
 
     }
 
-    public void printBoard(){
-        for (String[] line : dimensity){
-            for (String column : line){
-                System.out.print(column);
+    public void printBoard() {
+
+        int size = matriz.length;
+
+        // Cabeçalho das colunas
+        System.out.print("    "); // espaço para alinhar com números da esquerda
+        for (int i = 0; i < size; i++) {
+            System.out.printf("%3d ", i);
+        }
+        System.out.println();
+
+        // Linhas
+        for (int i = 0; i < size; i++) {
+            System.out.printf("%3d  ", i); // número da linha
+
+            for (int j = 0; j < size; j++) {
+                System.out.printf("%3s ", matriz[i][j]);
             }
             System.out.println();
         }
     }
 
 
+
     public void markBoard(Point point, String mark){
-        this.dimensity[point.X][point.Y] = mark;
+        this.matriz[point.X][point.Y] = mark;
     }
 
-    public String[][] getDimensity() {
-        return dimensity;
+    public String[][] getMatriz() {
+        return matriz;
     }
 
-    public void setDimensity(String[][] dimensity) {
-        this.dimensity = dimensity;
+    public void setMatriz(String[][] matriz) {
+        this.matriz = matriz;
     }
 
     public int getHeight() {
