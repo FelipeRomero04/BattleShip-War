@@ -1,6 +1,8 @@
-package org.example.Rules;
+package org.example.playerInfra.Rules;
 
 import org.example.Entitys.*;
+import org.example.playerInfra.exceptions.CoordinateIsNotSequencial;
+import org.example.playerInfra.exceptions.InvalidCoordinateException;
 
 import java.util.List;
 
@@ -11,7 +13,7 @@ public class RulesPlayer {
         for(Ship ship : ships){
             superimposeShip(board,ship);
             if(NotIsSequencial(ship)){
-                throw new RuntimeException("Os navio devem ser posicionados sequencialmente, na horizontal ou vertical.");
+                throw new CoordinateIsNotSequencial("Os navio devem ser posicionados sequencialmente, na horizontal ou vertical.");
             }
             offLimits(board, ship);
         }
@@ -32,23 +34,14 @@ public class RulesPlayer {
 
     }
 
-    public boolean playerWin(PlayerDTO player, Machine machine){
-        if(player.getMyShips().isEmpty()){
-            return false;
-        }
-        return machine.getMachineShips().isEmpty();
-    }
-    //Usar Enum?
-
-
     public void superimposeShip(Board board,Ship ship){
         try{
             for (Point point : ship.getPositionShips()) {
-                if (board.getMatriz()[point.X][point.Y].equals("O")) {
-                    throw new IllegalArgumentException("Um navio ja esta posicionado neste local");
+                if (board.getMatriz()[point.X][point.Y].equals("N")) {
+                    throw new InvalidCoordinateException("Um navio ja esta posicionado neste local");
 
                 } else if (board.getMatriz()[point.X][point.Y].equals("X")) {
-                    throw new IllegalArgumentException("Essa área pertence a um navio proximo");
+                    throw new InvalidCoordinateException("Essa área pertence a um navio proximo");
                 }
             }
 
@@ -110,7 +103,7 @@ public class RulesPlayer {
 
                     if(board.getMatriz()[newLine + 1][newColumn].equals("N") ||
                        board.getMatriz()[newLine][newColumn + 1].equals("N")){
-                        throw new RuntimeException("Os navios estão muito próximos! Posicione a um bloco de distância.");
+                        throw new InvalidCoordinateException("Os navios estão muito próximos! Posicione a um bloco de distância.");
                     }
                     board.getMatriz()[newLine][newColumn] = "P";
 

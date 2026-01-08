@@ -1,4 +1,4 @@
-package org.example.Rules.searchEngine;
+package org.example.playerInfra.engine;
 
 import org.example.Entitys.PlayerDTO;
 import org.example.Entitys.Point;
@@ -10,13 +10,6 @@ public class SearchEngineShipPlayer {
     private final Random random = new Random();
     private Ship ship;
     private Point randomPoint;
-
-
-//    public SearchEngineShipPlayer(PlayerDTO player) {
-//        this.player = player;
-//        this.ship = player.getMyShips().get(random.nextInt(player.getMyShips().size()));
-//        this.randomPoint = ship.getPositionShips().get(random.nextInt(ship.getPositionShips().size()));
-//    }
 
     public Ship getRandomShip(PlayerDTO player){
         if(this.ship == null){

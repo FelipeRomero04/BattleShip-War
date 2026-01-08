@@ -1,12 +1,9 @@
-package org.example.GameEngine;
+package org.example.machineInfra.engine;
 
 import org.example.Entitys.Board;
 import org.example.Entitys.Machine;
 import org.example.Entitys.PlayerDTO;
-import org.example.Rules.RulesMachine;
-import org.example.Rules.RulesPlayer;
-
-import java.util.Random;
+import org.example.machineInfra.rules.RulesMachine;
 
 public class EngineMachine {
     RulesMachine rulesMachine;

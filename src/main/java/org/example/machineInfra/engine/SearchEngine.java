@@ -1,4 +1,4 @@
-package org.example.Rules.searchEngine;
+package org.example.machineInfra.engine;
 
 import org.example.Entitys.*;
 

@@ -1,8 +1,8 @@
-package org.example.Rules;
+package org.example.machineInfra.rules;
 
 import org.example.Entitys.*;
-import org.example.Rules.searchEngine.SearchEngine;
-import org.example.Rules.searchEngine.SearchEngineShipPlayer;
+import org.example.machineInfra.engine.SearchEngine;
+import org.example.playerInfra.engine.SearchEngineShipPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +33,8 @@ public class RulesMachine {
 
             int column = random.nextInt(0, board.getHeight());
             int line = random.nextInt(0, board.getWidth());
+            System.out.println(line);
+            System.out.println(column);
             int directionRandom = random.nextInt(1,3);
 
             for (int j = 0; j < cellNum.get(i); j++) {
