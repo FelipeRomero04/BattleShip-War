@@ -20,7 +20,7 @@ public class RulesMachine {
         this.enginePlayer = enginePlayer;
     }
 
-    public Machine positioningRandom(PlayerDTO player, Board board){
+    public Machine positioningRandom(Player player, Board board){
         List<Point> points = new ArrayList<>();
         List<Ship> machineShips = new ArrayList<>();
         List<Integer> cellNum = cellPerShip(player);
@@ -52,7 +52,7 @@ public class RulesMachine {
         return new Machine(board, machineShips);
     }
 
-    public Point findShipTarget(Board board,PlayerDTO player){
+    public Point findShipTarget(Board board, Player player){
         if(enginePlayer.getRandomShip(player).getPositionShips().isEmpty()){ //Acabou as posições do ship
            resetSearch(board, player);
         }
@@ -64,7 +64,7 @@ public class RulesMachine {
         return foundPoint;
     }
 
-    public void attackMachineSequencial(Board board, PlayerDTO player) {
+    public void attackMachineSequencial(Board board, Player player) {
 
         Point attackPoint = findShipTarget(board ,player);
 
@@ -83,14 +83,14 @@ public class RulesMachine {
 
     }
 
-    private void resetSearch(Board board, PlayerDTO player){
+    private void resetSearch(Board board, Player player){
         enginePlayer.NewRandomShip(player);
         enginePlayer.NewRandomPoint();
         this.sequencial = false;
         engineMachine.resetIntervals(board);
     }
 
-    private void definingAttackMode(PlayerDTO player, Point point){
+    private void definingAttackMode(Player player, Point point){
         for(Ship shipPlayer : player.getMyShips()){
             if(shipPlayer.getPositionShips().contains(point)){
                 this.sequencial = true;
@@ -100,7 +100,7 @@ public class RulesMachine {
 
     }
 
-    private Ship sequencialMode(Board board,PlayerDTO player){
+    private Ship sequencialMode(Board board, Player player){
         Ship shipRandom = enginePlayer.getRandomShip(player);
         Point attackPoint = shipRandom.getPositionShips().get(random.nextInt(shipRandom.getPositionShips().size()));
         System.out.println("X: " + attackPoint.X + " Y: " + attackPoint.Y);
@@ -113,7 +113,7 @@ public class RulesMachine {
     }
 
 
-    private List<Integer> cellPerShip(PlayerDTO player){
+    private List<Integer> cellPerShip(Player player){
         List<Integer> cells = new ArrayList<>();
         for(Ship ship : player.getMyShips()){
             cells.add(ship.getPositionShips().size());

@@ -3,38 +3,22 @@ package org.example.playerInfra.engine;
 import org.example.Entitys.*;
 import org.example.playerInfra.Rules.RulesPlayer;
 import org.example.playerInfra.exceptions.InvalidCoordinateException;
-import org.example.playerInfra.view.CreatingShip;
+import org.example.playerInfra.view.ViewFleet;
 
 import java.util.List;
 
 public class EnginePlayer {
+    private final ViewFleet creatingShip;
+    private final RulesPlayer rulesPlayer;
 
-    CreatingShip creatingShip;
-    RulesPlayer rulesPlayer;
-
-    public EnginePlayer(CreatingShip creatingShip) {
+    public EnginePlayer(ViewFleet creatingShip) {
         this.creatingShip = creatingShip;
         this.rulesPlayer = new RulesPlayer();
     }
 
-    public PlayerDTO formingFleet(Board board){ //Formando frota
-        boolean resetList = true;
-        int attemp = 0;
-        int maxAttemp = 3;
-
-       while(attemp < maxAttemp) {
-            try {
-                List<Ship> ships = creatingShip.createShips(board, resetList);
-                System.out.println(ships.size());
-                return rulesPlayer.formingFleet(board, ships);
-            } catch (InvalidCoordinateException e) {
-                resetList = false;
-                System.err.println(e.getMessage());
-                System.out.println("Posicione o navio novamente.");
-            }
-            attemp++;
-       }
-        throw new RuntimeException("Tentativas excedidas.");
+    public Player formingFleet(Board board) { //Formando frota
+        List<Ship> ships = creatingShip.createFleet(board);
+        return rulesPlayer.validatingFleet(board, ships);
     }
 
 

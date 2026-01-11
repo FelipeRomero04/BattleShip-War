@@ -11,10 +11,8 @@ public class Main {
     }
 }
 
-//Player pode atacar o mesmo point varias vezes
-//machine
 
-// 1 / 4, 2/ 4, 3/ 4
 
-// 6/5, 6/ 6
+
+
 

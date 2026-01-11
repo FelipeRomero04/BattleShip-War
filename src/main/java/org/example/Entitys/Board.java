@@ -52,12 +52,26 @@ public class Board {
         this.matriz[point.X][point.Y] = mark;
     }
 
-    public String[][] getMatriz() {
-        return matriz;
+
+
+    public String getCoordinate(Point point) {
+        if(point.X >= this.width){point.X = width - 1;}
+        if(point.X < 0){point.X = 0;}
+
+        if(point.Y >= this.height){point.Y = height - 1;}
+        if(point.Y < 0){point.Y = 0;}
+
+        return matriz[point.X][point.Y];
     }
 
-    public void setCoordinate(int axleX, int axleY, String mark) {
-        this.matriz[axleX][axleY] = mark;
+    public void setCoordinate(Point point, String mark) {
+        if(point.X >= this.width){point.X = width - 1;}
+        if(point.X < 0){point.X = 0;}
+
+        if(point.Y >= this.height){point.Y = height - 1;}
+        if(point.Y < 0){point.Y = 0;}
+
+        this.matriz[point.X][point.Y] = mark;
     }
 
     public int getHeight() {

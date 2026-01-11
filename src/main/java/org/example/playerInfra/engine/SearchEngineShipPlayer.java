@@ -1,6 +1,6 @@
 package org.example.playerInfra.engine;
 
-import org.example.Entitys.PlayerDTO;
+import org.example.Entitys.Player;
 import org.example.Entitys.Point;
 import org.example.Entitys.Ship;
 
@@ -11,13 +11,13 @@ public class SearchEngineShipPlayer {
     private Ship ship;
     private Point randomPoint;
 
-    public Ship getRandomShip(PlayerDTO player){
+    public Ship getRandomShip(Player player){
         if(this.ship == null){
             NewRandomShip(player);
         }
         return this.ship;
     }
-    public Point getPointFromRandomShip(PlayerDTO player) {
+    public Point getPointFromRandomShip(Player player) {
         if(randomPoint == null){
             NewRandomShip(player);
             NewRandomPoint();
@@ -30,7 +30,7 @@ public class SearchEngineShipPlayer {
         this.randomPoint = ship.getPositionShips().get(random.nextInt(ship.getPositionShips().size()));
     }
 
-    public void NewRandomShip(PlayerDTO player){
+    public void NewRandomShip(Player player){
         this.ship = player.getMyShips().get(random.nextInt(player.getMyShips().size()));
     }
 

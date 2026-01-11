@@ -2,7 +2,7 @@ package org.example.machineInfra.engine;
 
 import org.example.Entitys.Board;
 import org.example.Entitys.Machine;
-import org.example.Entitys.PlayerDTO;
+import org.example.Entitys.Player;
 import org.example.machineInfra.rules.RulesMachine;
 
 public class EngineMachine {
@@ -13,12 +13,12 @@ public class EngineMachine {
 
     }
 
-    public Machine formingFleet(PlayerDTO player, Board board){
+    public Machine formingFleet(Player player, Board board){
         return rulesMachine.positioningRandom(player, board);
 
     }
 
-    public void hitPlayer(Board board, PlayerDTO player){
+    public void hitPlayer(Board board, Player player){
         rulesMachine.attackMachineSequencial(board, player);
     }
 

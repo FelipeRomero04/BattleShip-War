@@ -3,25 +3,17 @@ package org.example.playerInfra.view;
 import org.example.Entitys.Board;
 import org.example.Entitys.Point;
 import org.example.Entitys.Ship;
-import org.example.playerInfra.exceptions.CoordinateIsNotSequencial;
 import org.example.playerInfra.exceptions.InvalidCoordinateException;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.Set;
 
-public class CreatingShip {
+public class ViewFleet {
     private final Scanner input = new Scanner(System.in);
-    private final Set<String> positiveChoices = Set.of("sim", "s", "ss");
     private final List<Ship> playerShips = new ArrayList<>();
-    private boolean resetList = true;
 
-
-    public List<Ship> createShips(Board board, boolean resetList ){
-        if(resetList && !this.playerShips.isEmpty()){
-            this.playerShips.clear();
-        }
+    public List<Ship> createFleet(Board board){
 
         while(true){
             System.out.print("Quantas células terá seu navio: ");
@@ -32,30 +24,18 @@ public class CreatingShip {
             }
 
             List<Point> points = new ArrayList<>();
-
             board.printBoard();
-            for (int i = 0; i < cells; i++) {
 
-                System.out.print("Linha: ");
-                int line = Integer.parseInt(input.nextLine().trim());
-                if(line < 0 || line > board.getWidth()){
-                    throw new InvalidCoordinateException("O eixo X escolhido não existe no tabuleiro.");
+            for (int i = 3; i > 0 ; i--) {  //retry mechanism
+                try {
+                    points = positioningShips(board, cells);
+                    break;
+                } catch (InvalidCoordinateException e) {
+                    System.err.println(e.getMessage());
+                    System.out.println("Tentativas restantes: " + i);
                 }
-
-                System.out.print("Coluna: ");
-                int column = Integer.parseInt(input.nextLine().trim());
-                if(column < 0 || column > board.getWidth()){
-                    throw new InvalidCoordinateException("O eixo X escolhido não existe no tabuleiro.");
-                }
-
-                Point point = new Point(line, column);
-                isOverLap(board, point);
-
-                points.add(point);
-
-                board.markBoard(point, "N");
-                board.printBoard();
             }
+
             playerShips.add(new Ship(points));
 
             System.out.println("Adicionar um novo navio? SIM(1) / NÃO(0)");
@@ -71,6 +51,36 @@ public class CreatingShip {
             }
         }
     }
+
+    private List<Point> positioningShips(Board board, int cells){
+        List<Point> points = new ArrayList<>();
+
+
+        for (int i = 0; i < cells; i++) {
+
+            System.out.print("Linha: ");
+            int line = Integer.parseInt(input.nextLine().trim());
+            if(line < 0 || line > board.getWidth()){
+                throw new InvalidCoordinateException("O eixo X escolhido não existe no tabuleiro.");
+            }
+
+            System.out.print("Coluna: ");
+            int column = Integer.parseInt(input.nextLine().trim());
+            if(column < 0 || column > board.getWidth()){
+                throw new InvalidCoordinateException("O eixo X escolhido não existe no tabuleiro.");
+            }
+
+            Point point = new Point(line, column);
+            isOverLap(board, point);
+
+            points.add(point);
+
+            board.markBoard(point, "N");
+            board.printBoard();
+        }
+        return points;
+    }
+
 
     public Point hitPoint(Board board){
 
@@ -91,7 +101,7 @@ public class CreatingShip {
     }
 
     private void isOverLap(Board board, Point point){
-        if(board.getMatriz()[point.X][point.Y].equals("N")) {
+        if(board.getCoordinate(point).equals("N")) {
             throw new InvalidCoordinateException("Já existe um návio posicionado nessa posição.");
         }
     }

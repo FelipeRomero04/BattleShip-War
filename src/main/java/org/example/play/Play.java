@@ -2,19 +2,18 @@ package org.example.play;
 
 import org.example.Entitys.Board;
 import org.example.Entitys.Machine;
-import org.example.Entitys.PlayerDTO;
+import org.example.Entitys.Player;
 import org.example.playerInfra.Rules.Outcome;
 import org.example.playerInfra.engine.EnginePlayer;
 import org.example.machineInfra.engine.EngineMachine;
 import org.example.machineInfra.rules.RulesMachine;
 import org.example.machineInfra.engine.SearchEngine;
 import org.example.playerInfra.engine.SearchEngineShipPlayer;
-import org.example.playerInfra.view.CreatingShip;
+import org.example.playerInfra.view.ViewFleet;
 
 public class Play {
     private final Board boardPlayer;
     private final Board boardMachine;
-    private final CreatingShip creatingShip;
     private final RulesMachine rulesMachine;
     private final EnginePlayer enginePlayer;
     private final EngineMachine engineMachine;
@@ -22,9 +21,8 @@ public class Play {
     public Play() {
         this.boardPlayer = new Board(14, 14);
         this.boardMachine = new Board(14, 14);
-        this.creatingShip = new CreatingShip();
         this.rulesMachine = new RulesMachine(new SearchEngine(boardPlayer), new SearchEngineShipPlayer());
-        this.enginePlayer = new EnginePlayer(creatingShip);
+        this.enginePlayer = new EnginePlayer(new ViewFleet());
         this.engineMachine = new EngineMachine(rulesMachine);
 
     }
@@ -35,7 +33,7 @@ public class Play {
         System.out.println("BEM-VINDO AO BattleShip: FORME SUA FROTA!");
         System.out.println("=".repeat(40));
 
-        PlayerDTO player = enginePlayer.formingFleet(boardPlayer);
+        Player player = enginePlayer.formingFleet(boardPlayer);
         Machine machine = engineMachine.formingFleet(player, boardMachine);
 
         while(true){
@@ -85,7 +83,7 @@ public class Play {
         return false;
     }
 
-    private boolean verifyVictory(PlayerDTO player){
+    private boolean verifyVictory(Player player){
         if(player.getMyShips().isEmpty()){
             System.out.println(Outcome.MACHINE_WIN.menssage);
             return true;

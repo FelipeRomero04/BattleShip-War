@@ -7,15 +7,14 @@ import java.util.List;
 
 public class RulesPlayer {
 
-    public PlayerDTO formingFleet(Board board,List<Ship> ships){  //Formando frota
+    public Player validatingFleet(Board board, List<Ship> ships){  //Formando frota
         for(Ship ship : ships){
-//            superimposeShip(board,ship);
             if(NotIsSequencial(ship)){
                 throw new CoordinateIsNotSequencial("Os navio devem ser posicionados sequencialmente, na horizontal ou vertical.");
             }
             offLimits(board, ship);
         }
-        return new PlayerDTO(ships);
+        return new Player(ships);
     }
 
     public void attackingPoint(Board board,Machine machine, Point pointHit){
@@ -81,14 +80,14 @@ public class RulesPlayer {
 
                     Point aroundPoint =  new Point(newLine, newColumn);
 
-                    if(board.getMatriz()[newLine][newColumn].equals("N")) {
+                    if(board.getCoordinate(aroundPoint).equals("N")) {
                         if (!ship.getPositionShips().contains(aroundPoint)){
                             throw new CoordinateIsNotSequencial("Navios posicionados muito próximos. Eles devem conter no mínimo um ponto de distância");
                         }
                     }
 
-                    if(!board.getMatriz()[newLine][newColumn].equals("N")){
-                        board.setCoordinate(newLine, newColumn, "P");
+                    if(!board.getCoordinate(aroundPoint).equals("N")){
+                        board.setCoordinate(aroundPoint, "P");
                     }
                 }
             }
