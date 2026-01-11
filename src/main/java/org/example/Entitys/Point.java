@@ -4,26 +4,20 @@ package org.example.Entitys;
 import java.util.List;
 import java.util.Objects;
 
-//public record Point(int X, int Y){
-//}
-
-// ver se compensa transformar em class com SET
-
 public class Point{
     public int X;
     public int Y;
-    private List<Integer> point;
+    private final List<Integer> points;
 
     public Point(int x, int y) {
         X = x;
         Y = y;
-        point = List.of(X, Y);
+        points = List.of(X, Y);
     }
 
-    public List<Integer> getPoint() {
-        return point;
+    public List<Integer> getPoints() {
+        return points;
     }
-
 
     @Override
     public boolean equals(Object o){

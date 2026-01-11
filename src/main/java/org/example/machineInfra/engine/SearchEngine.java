@@ -24,9 +24,15 @@ public class SearchEngine {
     }
 
     public Point searchShip(Point point){
+        System.out.println("Valor Max: "+ maxAxleX);
+        System.out.println("Valor Min: "+ minAxleX);
+
         if(this.randomAxleX != point.X){
             this.randomAxleX = random.nextInt(minAxleX, maxAxleX);
         }
+
+        System.out.println("Valor Max: "+ maxAxleY);
+        System.out.println("Valor Min: "+ minAxleY);
 
         if(this.randomAxleY != point.Y) {
             this.randomAxleY = random.nextInt(minAxleY, maxAxleY);

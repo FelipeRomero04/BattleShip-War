@@ -14,26 +14,17 @@ import java.util.Set;
 public class CreatingShip {
     private final Scanner input = new Scanner(System.in);
     private final Set<String> positiveChoices = Set.of("sim", "s", "ss");
+    private final List<Ship> playerShips = new ArrayList<>();
+    private boolean resetList = true;
 
 
-    public Board defineSizeBoard(){
-        System.out.println("DEFININDO TAMANHO DO TABULEIRO:");
-
-        System.out.println("ALTURA: ");
-        int height = Integer.parseInt(input.nextLine()); //TODO: Validar
-
-        System.out.println("LARGURA: ");
-        int width = Integer.parseInt(input.nextLine());
-
-        return new Board(height, width);
-    }
-
-
-    public List<Ship> createShips(Board board){
-        List<Ship> playerShips = new ArrayList<>();
+    public List<Ship> createShips(Board board, boolean resetList ){
+        if(resetList && !this.playerShips.isEmpty()){
+            this.playerShips.clear();
+        }
 
         while(true){
-            System.out.println("Quantas células terá seu navio: ");
+            System.out.print("Quantas células terá seu navio: ");
             int cells = Integer.parseInt(input.nextLine().trim());
 
             if (cells > 6) {
@@ -58,18 +49,19 @@ public class CreatingShip {
                 }
 
                 Point point = new Point(line, column);
-                points.add(point);
+                isOverLap(board, point);
 
+                points.add(point);
 
                 board.markBoard(point, "N");
                 board.printBoard();
             }
             playerShips.add(new Ship(points));
 
-            System.out.println("Adicionar um novo navio? SIM(0) / NÃO(1)");
+            System.out.println("Adicionar um novo navio? SIM(1) / NÃO(0)");
             int choice = Integer.parseInt(input.nextLine().trim());
 
-            if(choice == 1){
+            if(choice == 0){
                 return playerShips;
             }
 
@@ -84,17 +76,24 @@ public class CreatingShip {
 
         System.out.println("Coordenadas de Ataque:");
         System.out.print("X: ");
-        int x = Integer.parseInt(input.nextLine().trim()); //TODO: validação simples
+        int x = Integer.parseInt(input.nextLine().trim());
         if(x > board.getWidth() || x < 0){
-            throw new CoordinateIsNotSequencial("Eixo X não existe dentro do tabuleiro");
+            throw new InvalidCoordinateException("Eixo X não existe dentro do tabuleiro");
         }
+
         System.out.print("Y: ");
-        int y = Integer.parseInt(input.nextLine().trim()); //TODO: validação simples
+        int y = Integer.parseInt(input.nextLine().trim());
         if(y > board.getWidth() || y < 0){
-            throw new CoordinateIsNotSequencial("Eixo Y não existe dentro do tabuleiro");
+            throw new InvalidCoordinateException("Eixo Y não existe dentro do tabuleiro");
 
         }
         return new Point(x,y);
+    }
+
+    private void isOverLap(Board board, Point point){
+        if(board.getMatriz()[point.X][point.Y].equals("N")) {
+            throw new InvalidCoordinateException("Já existe um návio posicionado nessa posição.");
+        }
     }
 
 

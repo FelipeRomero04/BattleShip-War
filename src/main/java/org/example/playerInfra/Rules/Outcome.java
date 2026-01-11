@@ -4,9 +4,10 @@ public enum Outcome {
     PLAYER_WIN("O Player GANHOU! Sua frota venceu a guerra!"),
     MACHINE_WIN("A Maquina GANHOU! Sua frota foi derrotada.");
 
-    private String menssage;
+    public final String menssage;
 
-    Outcome(String message) {
-        this.menssage = message;
+    Outcome(String menssage) {
+        this.menssage = menssage;
     }
+
 }

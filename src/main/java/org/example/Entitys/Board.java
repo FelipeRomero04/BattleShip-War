@@ -5,7 +5,7 @@ import java.util.Arrays;
 public class Board {
     private final int height;
     private final int width;
-    private String[][] matriz;
+    private final String[][] matriz;
 
 
     public Board(int height, int width) {
@@ -56,8 +56,8 @@ public class Board {
         return matriz;
     }
 
-    public void setMatriz(String[][] matriz) {
-        this.matriz = matriz;
+    public void setCoordinate(int axleX, int axleY, String mark) {
+        this.matriz[axleX][axleY] = mark;
     }
 
     public int getHeight() {

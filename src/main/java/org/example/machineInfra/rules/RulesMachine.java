@@ -10,19 +10,15 @@ import java.util.Random;
 
 public class RulesMachine {
     private final Random random = new Random();
-
     private final SearchEngine engineMachine;
     private final SearchEngineShipPlayer enginePlayer;
 
     private boolean sequencial = false;
 
-
     public RulesMachine( SearchEngine engine, SearchEngineShipPlayer enginePlayer) {
-//        this.board = board;
         this.engineMachine = engine;
         this.enginePlayer = enginePlayer;
     }
-
 
     public Machine positioningRandom(PlayerDTO player, Board board){
         List<Point> points = new ArrayList<>();
@@ -56,18 +52,16 @@ public class RulesMachine {
         return new Machine(board, machineShips);
     }
 
-//if(player.getShips.size > 1)
-    // searchShip, machineAttackSequencial
     public Point findShipTarget(Board board,PlayerDTO player){
         if(enginePlayer.getRandomShip(player).getPositionShips().isEmpty()){ //Acabou as posições do ship
            resetSearch(board, player);
         }
 
-        Point randomPoint = enginePlayer.getPointFromRandomShip(player);
-        Point findShip = engineMachine.searchShip(randomPoint);
+        Point targetPoint = enginePlayer.getPointFromRandomShip(player);
+        Point foundPoint = engineMachine.searchShip(targetPoint);
 
-        definingAttackMode(findShip, randomPoint);
-        return findShip;
+        definingAttackMode(player,foundPoint);
+        return foundPoint;
     }
 
     public void attackMachineSequencial(Board board, PlayerDTO player) {
@@ -96,11 +90,14 @@ public class RulesMachine {
         engineMachine.resetIntervals(board);
     }
 
-    private void definingAttackMode(Point pointPlayer, Point pointMachine){
-        if(pointPlayer.equals(pointMachine)){
-            System.out.println("Seu navio está sendo atacado! ");
-            this.sequencial = true;
+    private void definingAttackMode(PlayerDTO player, Point point){
+        for(Ship shipPlayer : player.getMyShips()){
+            if(shipPlayer.getPositionShips().contains(point)){
+                this.sequencial = true;
+                return;
+            }
         }
+
     }
 
     private Ship sequencialMode(Board board,PlayerDTO player){
@@ -116,30 +113,6 @@ public class RulesMachine {
     }
 
 
-
-
-
-//    public void attackMachineSequencial(boolean flag) {
-//        findShipTarget();
-//        Point randomPoint = enginePlayer.getPointFromRandomShip();
-//        if(sequencial){
-//            Ship shipRandom = enginePlayer.getRandomShip();
-//            randomPoint = shipRandom.getPositionShips().get(random.nextInt(shipRandom.getPositionShips().size()));
-//            board.markBoard(randomPoint, "X");
-//            shipRandom.destroyedPoint(randomPoint);
-//
-//        }
-//
-//        board.markBoard(randomPoint, "E");
-//
-//
-//
-//    }
-
-
-
-
-
     private List<Integer> cellPerShip(PlayerDTO player){
         List<Integer> cells = new ArrayList<>();
         for(Ship ship : player.getMyShips()){
@@ -147,9 +120,6 @@ public class RulesMachine {
         }
         return cells;
     }
-
-
-
 
     private int decrementOrIncrementColumn(Board board,int column, int cell){
         if (column + cell >= board.getHeight()) {
@@ -168,6 +138,4 @@ public class RulesMachine {
         }
         return line + 1;
     }
-
-
 }
