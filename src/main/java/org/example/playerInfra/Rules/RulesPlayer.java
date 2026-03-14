@@ -54,7 +54,7 @@ public class RulesPlayer {
 
         boolean yEquals = ship.getYPoints().stream().allMatch(n -> n.equals(ship.getYPoints().get(0)));
 
-        if(yEquals){
+        if(yEquals){ // Garante posições sequencias na horizontal
             for (int i = 1; i < ship.getYPoints().size(); i++) {
                 if (!(ship.getXPoints().get(i) == ship.getXPoints().get(i - 1) + 1)){
                     System.out.println(ship.getYPoints().get(i));
@@ -66,7 +66,7 @@ public class RulesPlayer {
         return false;
     }
 
-
+// <- Evita posicionamento muito proximo ->
     public void offLimits(Board board, Ship ship){
         int index = 0;
 

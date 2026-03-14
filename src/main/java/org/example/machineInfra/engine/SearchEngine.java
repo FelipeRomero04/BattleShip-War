@@ -35,8 +35,6 @@ public class SearchEngine {
             this.randomAxleX = random.nextInt(minAxleX, maxAxleX);
         }
 
-        System.out.println("Valor Max: "+ maxAxleY);
-        System.out.println("Valor Min: "+ minAxleY);
         if(maxAxleY == minAxleY){
             maxAxleY += 1;
         }

@@ -19,6 +19,7 @@ public class Point{
         return points;
     }
 
+    // <- equals compara os eixos ->
     @Override
     public boolean equals(Object o){
         if(!(o instanceof Point)) return false;

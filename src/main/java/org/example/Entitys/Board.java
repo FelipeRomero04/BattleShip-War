@@ -28,16 +28,16 @@ public class Board {
 
         int size = matriz.length;
 
-        // Cabeçalho das colunas
-        System.out.print("    "); // espaço para alinhar com números da esquerda
+        // <- Cabeçalho das colunas ->
+        System.out.print("    ");
         for (int i = 0; i < size; i++) {
             System.out.printf("%3d ", i);
         }
         System.out.println();
 
-        // Linhas
+        // <- Linhas ->
         for (int i = 0; i < size; i++) {
-            System.out.printf("%3d  ", i); // número da linha
+            System.out.printf("%3d  ", i);
 
             for (int j = 0; j < size; j++) {
                 System.out.printf("%3s ", matriz[i][j]);

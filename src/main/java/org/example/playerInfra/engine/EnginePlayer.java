@@ -28,7 +28,7 @@ public class EnginePlayer {
                 Point pointHit = creatingShip.hitPoint(board);
                 rulesPlayer.attackingPoint(board, machine, pointHit);
                 return;
-               //Ver como isso ta funcionando
+
             } catch (InvalidCoordinateException e) {
                 System.err.println(e.getMessage());
                 System.out.println("Posicione o navio novamente!");

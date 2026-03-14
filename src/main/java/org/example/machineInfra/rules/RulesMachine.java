@@ -29,8 +29,7 @@ public class RulesMachine {
 
             int column = random.nextInt(0, board.getHeight());
             int line = random.nextInt(0, board.getWidth());
-            System.out.println(line);
-            System.out.println(column);
+
             int directionRandom = random.nextInt(1,3);
 
             for (int j = 0; j < cellNum.get(i); j++) {
@@ -46,7 +45,6 @@ public class RulesMachine {
                     line = decrementOrIncrementLine(board ,line, cellNum.get(i));
                 }
             }
-            System.out.println(points);
             machineShips.add(new Ship(points));
         }
         return new Machine(board, machineShips);
@@ -69,8 +67,6 @@ public class RulesMachine {
         Point attackPoint = findShipTarget(board ,player);
 
         if(!sequencial){
-            System.out.println("ENTROU AKI");
-            System.out.println("X: " + attackPoint.X + " Y: " + attackPoint.Y);
             board.markBoard(attackPoint, "E");
             return;
         }

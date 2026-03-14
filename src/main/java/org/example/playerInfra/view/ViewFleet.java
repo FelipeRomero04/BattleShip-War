@@ -55,7 +55,6 @@ public class ViewFleet {
     private List<Point> positioningShips(Board board, int cells){
         List<Point> points = new ArrayList<>();
 
-
         for (int i = 0; i < cells; i++) {
 
             System.out.print("Linha: ");
